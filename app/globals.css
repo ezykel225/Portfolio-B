@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Design tokens.
+
+   Tailwind v4 does not read a JS config — theme values have to be
+   declared here in @theme, which is what generates the utilities
+   (font-syne, text-muted, border-border, …). The short `--bg` /
+   `--purple` aliases below are what the inline `style` props and
+   the arbitrary-value classes reference, so they are derived from
+   these tokens rather than restated. One value, one place.
+   ============================================================ */
+@theme {
+  --color-bg:       #09090B;
+  --color-surface:  #111113;
+  --color-surface2: #18181B;
+  --color-border:   #27272A;
+  --color-purple:   #7C3AED;
+  --color-purple-l: #A78BFA;
+  --color-green:    #22C55E;
+  --color-amber:    #FBBF24;
+  --color-blue:     #60A5FA;
+  --color-text:     #FAFAFA;
+
+  /* Neutrals sit high enough on the ramp to clear WCAG AA (4.5:1)
+     against both --bg and --surface. */
+  --color-muted:    #8B8B96;  /* 5.90:1 on bg */
+  --color-muted2:   #7E7E8A;  /* 4.96:1 on bg */
+
+  /* next/font exposes the loaded families as --font-*-src on <html>.
+     Aliasing them here (rather than reusing the same variable names)
+     keeps next/font and Tailwind from overwriting each other. */
+  --font-syne: var(--font-syne-src), ui-sans-serif, system-ui, sans-serif;
+  --font-dm:   var(--font-dm-src), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-src), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+:root {
+  --bg:       var(--color-bg);
+  --surface:  var(--color-surface);
+  --surface2: var(--color-surface2);
+  --border:   var(--color-border);
+  --purple:   var(--color-purple);
+  --purple-l: var(--color-purple-l);
+  --green:    var(--color-green);
+  --amber:    var(--color-amber);
+  --blue:     var(--color-blue);
+  --text:     var(--color-text);
+  --muted:    var(--color-muted);
+  --muted2:   var(--color-muted2);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-dm);
+  /* Nothing on the page is meant to scroll sideways. */
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--purple); }
+::selection { background: rgba(124, 58, 237, 0.3); }
+
+/* Several controls set outline:none for a custom border treatment,
+   so keyboard users need a ring put back deliberately. */
+:focus-visible {
+  outline: 2px solid var(--purple-l);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@keyframes pulse-dot { 0%,100% { opacity: 1 } 50% { opacity: 0.3 } }
+.animate-pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  /* The "open to work" dot is a decorative loop — hold it at its
+     visible state rather than animating it. */
+  .animate-pulse-dot {
+    animation: none;
+    opacity: 1;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
