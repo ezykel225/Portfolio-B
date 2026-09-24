@@ -20,6 +20,9 @@ interface ProjectTileProps {
  */
 export function ProjectTile({ project, onOpen }: ProjectTileProps) {
   const cover = project.images[0]
+  // A landscape tile has to crop a tall phone capture. Take it from the
+  // middle rather than the top, where a phone screen is usually empty.
+  const coverPosition = project.shotAspect === 'portrait' ? 'object-center' : 'object-top'
 
   return (
     <article className="wk-card wk-interactive group relative flex min-h-0 flex-col overflow-hidden">
@@ -33,7 +36,7 @@ export function ProjectTile({ project, onOpen }: ProjectTileProps) {
           alt={`${project.title} — application screenshot`}
           fill
           sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 92vw"
-          className="object-cover object-top opacity-90 transition-[opacity,transform] duration-300 group-hover:scale-[1.02] group-hover:opacity-100 motion-reduce:transform-none motion-reduce:transition-none"
+          className={`object-cover ${coverPosition} opacity-90 transition-[opacity,transform] duration-300 group-hover:scale-[1.02] group-hover:opacity-100 motion-reduce:transform-none motion-reduce:transition-none`}
         />
         <span className="wk-meta absolute top-2.5 left-2.5 rounded-full border border-[var(--wk-line)] bg-[var(--bg)]/85 px-2 py-1 text-[var(--muted)] backdrop-blur-sm">
           {project.type}
