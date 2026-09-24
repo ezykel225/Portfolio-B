@@ -37,6 +37,12 @@ export interface Project {
   emoji: string
   gradient: string
   images: string[]
+  /**
+   * Shape of the screenshots. Phone captures are tall, so a 16:10
+   * gallery frame would crop three quarters of them away. Defaults
+   * to 'landscape' when omitted.
+   */
+  shotAspect?: 'landscape' | 'portrait'
   live: string
   github: string
   category: string[]

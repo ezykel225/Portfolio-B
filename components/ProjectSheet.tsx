@@ -26,16 +26,23 @@ function Heading({ children }: { children: React.ReactNode }) {
  *  whenever a different project is opened (it is keyed by project id). */
 function Gallery({ project }: { project: Project }) {
   const [index, setIndex] = useState(0)
+  const portrait = project.shotAspect === 'portrait'
 
   return (
     <div>
-      <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[var(--wk-radius-sm)] border border-[var(--wk-line)] bg-[var(--wk-card-raised)]">
+      {/* Phone captures are shown whole on a letterboxed panel; a 16:10
+          cover crop would throw away three quarters of the screen. */}
+      <div
+        className={`relative w-full overflow-hidden rounded-[var(--wk-radius-sm)] border border-[var(--wk-line)] bg-[var(--bg)] ${
+          portrait ? 'aspect-[3/4] max-h-[62vh]' : 'aspect-[16/10]'
+        }`}
+      >
         <Image
           src={project.images[index]}
           alt={`${project.title} — screenshot ${index + 1} of ${project.images.length}`}
           fill
           sizes="(min-width: 640px) 640px, 100vw"
-          className="object-cover object-top"
+          className={portrait ? 'object-contain' : 'object-cover object-top'}
           priority={index === 0}
         />
       </div>
@@ -49,7 +56,9 @@ function Gallery({ project }: { project: Project }) {
                 onClick={() => setIndex(i)}
                 aria-label={`Show screenshot ${i + 1}`}
                 aria-pressed={i === index}
-                className={`relative h-12 w-16 overflow-hidden rounded border transition-colors ${
+                className={`relative overflow-hidden rounded border transition-colors ${
+                  portrait ? 'h-16 w-10' : 'h-12 w-16'
+                } ${
                   i === index
                     ? 'border-[var(--purple-l)]'
                     : 'border-[var(--wk-line)] opacity-60 hover:opacity-100'
